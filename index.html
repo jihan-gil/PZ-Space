@@ -366,8 +366,16 @@ input[type=range].mr{width:100%;height:10px;-webkit-appearance:none;appearance:n
   .lc { width: 70vw; max-width: 260px; aspect-ratio: 1.6/1; }
   .lt { font-size: 44px; letter-spacing: 3px; }
  
-  /* 4. Nav bar — tighter for thumbs */
-  .nb { min-width: 44px; padding: 5px 6px; }
+  /* 4. Nav bar — tighter for thumbs + horizontal scroll so all 7 tabs fit */
+  #nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  #nav::-webkit-scrollbar { display: none; }
+  .nb { flex-shrink: 0; min-width: 44px; padding: 5px 6px; }
   .nb .ni { font-size: 16px; }
   .nb .nl { font-size: 7.5px; }
  
@@ -398,7 +406,7 @@ input[type=range].mr{width:100%;height:10px;-webkit-appearance:none;appearance:n
  
   /* 8. Messaging — wider bubbles on narrow screens */
   .msg-bubble-wrap { max-width: 82% !important; }
-}  
+}
 </style>
 </head>
 <body>
