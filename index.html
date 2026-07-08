@@ -704,6 +704,15 @@ function mdParse(txt){
 function resizeVP(){
   const vp=document.getElementById('vp'),gate=document.getElementById('lg');
   const W=window.innerWidth,H=window.innerHeight,portrait=H>W,mobile=W<900;
+
+
+  if(W<=768&&portrait){
+    gate.style.display='none';
+    vp.style.display='block';
+    vp.style.width='';vp.style.height='';vp.style.left='';vp.style.top='';
+    return;
+  }
+
   if(mobile&&portrait){gate.style.display='flex';vp.style.display='none';return;}
   gate.style.display='none';vp.style.display='block';
   const ratio=16/9;let w=W,h=W/ratio;
@@ -712,6 +721,7 @@ function resizeVP(){
   vp.style.left=((W-w)/2)+'px';vp.style.top=((H-h)/2)+'px';
   vp.style.setProperty('--nav-h',Math.round(h*0.082)+'px');
 }
+
 window.addEventListener('resize',resizeVP);resizeVP();
 
 // ═══════════════════════════════════════════════════════
