@@ -353,11 +353,12 @@ input[type=range].mr{width:100%;height:10px;-webkit-appearance:none;appearance:n
   #lg { display: none !important; }
  
   /* 2. Let #vp fill the real screen instead of a forced 16:9 box */
-  #vp {
+#vp {
     position: fixed !important;
     top: 0 !important; left: 0 !important;
     width: 100vw !important;
-    height: 100vh !important;
+    height: 100vh !important;      /* fallback for old browsers */
+    height: 100dvh !important;     /* real visible height on modern mobile */
     --nav-h: 60px;
   }
  
