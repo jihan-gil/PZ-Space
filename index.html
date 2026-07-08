@@ -345,6 +345,60 @@ input[type=range].mr{width:100%;height:10px;-webkit-appearance:none;appearance:n
 .msg-paste-preview img{height:48px;border-radius:6px;}
 .msg-paste-cancel{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;padding:2px 6px;}
 .msg-date-sep{text-align:center;font-size:10px;color:var(--text-muted);font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 0;}
+/*update css 260708*/
+/* ───────── MOBILE PORTRAIT BREAKPOINT ───────── */
+@media (max-width: 768px) and (orientation: portrait) {
+ 
+  /* 1. Kill the landscape gate entirely on phones */
+  #lg { display: none !important; }
+ 
+  /* 2. Let #vp fill the real screen instead of a forced 16:9 box */
+  #vp {
+    position: fixed !important;
+    top: 0 !important; left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    --nav-h: 60px;
+  }
+ 
+  /* 3. Landing screen — stack the two login cards vertically */
+  .lcs { flex-direction: column; gap: 16px; }
+  .lc { width: 70vw; max-width: 260px; aspect-ratio: 1.6/1; }
+  .lt { font-size: 44px; letter-spacing: 3px; }
+ 
+  /* 4. Nav bar — tighter for thumbs */
+  .nb { min-width: 44px; padding: 5px 6px; }
+  .nb .ni { font-size: 16px; }
+  .nb .nl { font-size: 7.5px; }
+ 
+  /* 5. Split-header + split-panel screens → tab toggle mode
+     (Mood, Habit). The .sph divs become tab buttons via JS below;
+     this CSS just handles show/hide of whichever panel is active.) */
+  .sph { display: flex !important; cursor: pointer; }
+  .sph-his, .sph-her { border-right: none !important; }
+  .sph-his.tab-off, .sph-her.tab-off { opacity: .4; }
+ 
+  .mood-body, .hab-cals { grid-template-columns: 1fr !important; }
+  .mood-panel, .hab-panel { display: none !important; }
+  .mood-panel.tab-active, .hab-panel.tab-active { display: flex !important; }
+ 
+  .mood-panel.his, .mood-panel.her { border-right: none !important; }
+ 
+  /* 6. Calendar — smaller day cells, 2-line event preview only */
+  .cal-day { min-height: 64px; }
+  .cal-evi { font-size: 7px; }
+  .cal-mo { font-size: 20px; }
+ 
+  /* 7. Logbook / Goals / Pomo — already stack fine, just tighten padding */
+  .lb-tab { font-size: 9px; padding: 10px 6px; }
+  .gl-txt { font-size: 13px; }
+  .pomo-l, .pomo-r { flex: unset !important; width: 100% !important; }
+  #screen-pomo { flex-direction: column !important; }
+  .pomo-l { border-right: none !important; border-bottom: 1px solid var(--border); min-height: 45vh; }
+ 
+  /* 8. Messaging — wider bubbles on narrow screens */
+  .msg-bubble-wrap { max-width: 82% !important; }
+}  
 </style>
 </head>
 <body>
@@ -561,7 +615,33 @@ input[type=range].mr{width:100%;height:10px;-webkit-appearance:none;appearance:n
 
 </div><!-- /vp -->
 <div class="toast" id="toast"></div>
-
+<script>
+/* ───────── TAB-TOGGLE LOGIC (mobile split panels) ─────────
+   Only relevant on the mobile breakpoint but harmless elsewhere.
+   Click the .sph-his / .sph-her header row to switch which panel shows.
+   Defaults to "his" active on load; persists per-screen via data attr. */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.sph').forEach(sph => {
+    const screen = sph.closest('.screen');
+    if (!screen) return;
+    const hisBtn = sph.querySelector('.sph-his');
+    const herBtn = sph.querySelector('.sph-her');
+    const hisPanel = screen.querySelector('.mood-panel.his, .hab-panel:first-child');
+    const herPanel = screen.querySelector('.mood-panel.her, .hab-panel:last-child');
+    if (!hisBtn || !herBtn || !hisPanel || !herPanel) return;
+ 
+    function activate(who) {
+      hisBtn.classList.toggle('tab-off', who !== 'his');
+      herBtn.classList.toggle('tab-off', who !== 'her');
+      hisPanel.classList.toggle('tab-active', who === 'his');
+      herPanel.classList.toggle('tab-active', who === 'her');
+    }
+    hisBtn.addEventListener('click', () => activate('his'));
+    herBtn.addEventListener('click', () => activate('her'));
+    activate('his'); // default
+  });
+});
+</script>
 <script type="module">
 // ═══════════════════════════════════════════════════════
 // FIREBASE SETUP
